@@ -1,11 +1,11 @@
-const WEATHER_API_BASE_URL = "https://openweathermap.org";
-const WEATHER_API_KEY = "675a5e8d69b36fd32fa843e0b7a4d238";
+const WEATHER_API_BASE_URL = "https://api.openweathermap.org";
+const WEATHER_API_KEY = "f23ee9deb4e1a7450f3157c44ed020e1";
 const MAX_DAILY_FORECAST = 5;
 
-const recentlocations = [];
+let recentLocations = [];
 
 const getLocation = () => {
-  const userLocation = locationInput.value;
+  const userLocation = locationInput.value.trim();
   if (userLocation === "") {
     setLocationError("Please enter a location");
   } else {
@@ -26,50 +26,70 @@ const setLocationError = (text) => {
 };
 
 const lookupLocation = (search) => {
-  var apiUrl = `${WEATHER_API_BASE_URL}/geo/1.0/direct?q=${search}&limit=5&appid=${WEATHER_API_KEY}`;
-  fetch(apiUrl)
+  const geoApiUrl = `${WEATHER_API_BASE_URL}/geo/1.0/direct?q=${search}&limit=5&appid=${WEATHER_API_KEY}`;
+  fetch(geoApiUrl)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      const { lat, lon } = data[0];
 
-      // Pick the First location from the results
-      //const location = data[0];
-      var lat = data[0].lat;
-      var lon = data[0].lon;
-
-      // Get the Weather for the cached location
-      var apiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
-      console.log(apiUrl);
-      fetch(apiUrl)
+      const weatherApiUrl = `${WEATHER_API_BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`;
+      fetch(weatherApiUrl)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-
-          // Display the Current Weather
-          displayCurrentweather(data);
-
-          // Display the 5 Day Forecast
+          displayCurrentWeather(data);
           displayWeather(data);
+          recentLocations.push(search);
+          if (recentLocations.length > 5) {
+            recentLocations.shift();
+          }
+          localStorage.setItem(
+            "recentLocations",
+            JSON.stringify(recentLocations)
+          );
+          renderSearchHistory();
         });
     });
 };
 
-// Add an event handler for the search button
-const displayCurrentweather = (weatherData) => {
-  const Currentweather = weatherData.current;
-  document.getElementById("temp_value").textContent = "${currentWeather.temp}°";
-  document.getElementById("wind_value").textContent =
-    "${currentWeather.wind_speed}MPH";
-  document.getElementById("humid_value").textContent =
-    "${currentWeather.humidity}%";
-  document.getElementById("uvi_value").textContent = "${currentWeather.uvi}";
+const displayCurrentWeather = (weatherData) => {
+  const currentWeather = weatherData.current;
+  document.getElementById("city_name").textContent = weatherData.timezone;
+  document.getElementById("date").textContent = getCurrentDate();
+  document
+    .getElementById("weather_icon")
+    .setAttribute("src", getWeatherIconUrl(currentWeather.weather[0].icon));
+  document.getElementById("temp_value").textContent = `${currentWeather.temp}`;
+  document.getElementById(
+    "humidity_value"
+  ).textContent = `${currentWeather.humidity}%`;
+  document.getElementById(
+    "wind_speed_value"
+  ).textContent = `${currentWeather.wind_speed} MPH`;
+};
+
+const getCurrentDate = () => {
+  const currentDate = new Date();
+  return currentDate.toLocaleDateString();
+};
+
+const getWeatherIconUrl = (iconCode) => {
+  return `https://openweathermap.org/img/w/${iconCode}.png`;
+};
+
+const loadSearchHistory = () => {
+  const storedLocations = localStorage.getItem("recentLocations");
+  if (storedLocations) {
+    recentLocations = JSON.parse(storedLocations);
+    renderSearchHistory();
+  }
 };
 
 const displayWeather = (weatherData) => {
-  const forecastContainer = document.getElementById("forecast");
+  const forecastContainer = document.getElementById("forecast_items");
   forecastContainer.innerHTML = "";
 
   const dailyForecast = weatherData.daily.slice(1, MAX_DAILY_FORECAST + 1);
+
   dailyForecast.forEach((day) => {
     const date = new Date(day.dt * 1000).toLocaleDateString();
     const iconUrl = getWeatherIconUrl(day.weather[0].icon);
@@ -104,3 +124,25 @@ const displayWeather = (weatherData) => {
     forecastContainer.appendChild(forecastItem);
   });
 };
+
+const renderSearchHistory = () => {
+  const searchHistoryContainer = document.getElementById("search_history");
+  searchHistoryContainer.innerHTML = "";
+
+  recentLocations.forEach((location) => {
+    const locationItem = document.createElement("div");
+    locationItem.classList.add("search-history-item");
+    locationItem.textContent = location;
+    locationItem.addEventListener("click", () => {
+      lookupLocation(location);
+    });
+
+    searchHistoryContainer.appendChild(locationItem);
+  });
+};
+
+const searchButton = document.getElementById("search_button");
+searchButton.addEventListener("click", getLocation);
+
+// Load search history on page load
+window.addEventListener("load", loadSearchHistory);

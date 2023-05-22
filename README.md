@@ -1,4 +1,4 @@
-# SideServerAPI-s-WeatherDashboard
+# ServerSideAPI-WeatherDashboard
 
 # Weather Dashboard
 

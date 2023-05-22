@@ -1,0 +1,145 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(to right, black, #8d8182, #333031);
+}
+
+header h1 {
+  color: blanchedalmond;
+  font-size: 2em;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  color: blanchedalmond;
+}
+
+section {
+  margin: 10px;
+  width: 75%;
+}
+
+aside {
+  margin: 10px;
+  width: 25%;
+  border-radius: 5px;
+  box-shadow: 5px 5px #333031;
+  background-color: #8d8182;
+}
+
+aside .search-section {
+  margin-top: 10px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+aside .search-section input {
+  border: #333031;
+  height: 30px;
+  padding: 5px;
+  -webkit-animation-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+aside .search-section button {
+  margin-top: 10px;
+  border-radius: 5px;
+  height: 30px;
+  background-color: #8d8182;
+  border: 0;
+  color: #333031;
+}
+
+aside .search-section #error {
+  color: #333031;
+  font-size: 0.8cm;
+  height: 20px;
+  margin-top: 2px;
+}
+
+aside .recent-section {
+  margin-top: 10px;
+  padding: 5px;
+}
+
+aside .recent-section .recent {
+  margin-top: 10px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #333031;
+  border-radius: 5px;
+}
+
+#weather {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #333031;
+  box-shadow: #8d8182;
+}
+
+#weather .weather-location {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+#weather .weather-info {
+  line-height: 2em;
+}
+
+#forecast {
+  display: none;
+  margin-top: 25px;
+}
+
+#forecast #forecast-days {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+#forecast .forecast-day .weather-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 2.5em;
+  padding: 10px;
+  color: blanchedalmond;
+}
+
+@media only screen and (max-width: 600px) {
+  aside {
+    width: 95%;
+  }
+
+  section {
+    width: 95%;
+  }
+
+  main {
+    flex-direction: column;
+  }
+
+  #forecast #forecast-days {
+    flex-direction: column;
+  }
+
+  #forecast .forecast-day {
+    width: 100%;
+    min-height: auto;
+    margin-top: 10px;
+  }
+}

@@ -20,7 +20,7 @@ header h1 {
 main {
   display: flex;
   flex-direction: row;
-  color: blanchedalmond;
+  color: rgb(12, 12, 12);
 }
 
 section {

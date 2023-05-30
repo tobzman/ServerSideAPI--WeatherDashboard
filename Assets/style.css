@@ -112,6 +112,7 @@ body {
   flex-wrap: wrap;
   justify-content: space-around;
   flex-direction: row;
+  background-color: #8d8182;
 }
 
 .forecast-day .info {

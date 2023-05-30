@@ -9,13 +9,13 @@
   </head>
 
   <body>
-    <header>
+    <div class="site-header">
       <h1>WEATHER DASHBOARD</h1>
-    </header>
+    </div>
 
-    <main>
+    <div class="main-content">
       <!-- Left hand Side bar section -->
-      <aside>
+      <aside class="weather-sidebar">
         <div class="search-section">
           <input
             type="text"
@@ -33,10 +33,10 @@
       </aside>
 
       <!-- Main Dashboard Area -->
-      <section>
-        <div id="weather">
+      <section class="weather-dashboard">
+        <div id="weather" class="weather-details">
           <div class="weather-icon">
-            <div class="weather-location" id="city_name">Enter a Location</div>
+            <div class="location" id="city_name">Enter a Location</div>
             <img id="weather_icon" src="" alt="Weather Icon" />
           </div>
           <div class="weather-info">
@@ -55,12 +55,13 @@
           </div>
         </div>
 
-        <div id="forecast">
+        <div id="forecast" class="forecast">
           <h2>5-Day Forecast</h2>
-          <div id="forecast_items"></div>
+          <div id="forecast_items" class="forecast-days"></div>
         </div>
       </section>
-    </main>
+    </div>
+
     <script src="Assets/script.js"></script>
   </body>
 </html>

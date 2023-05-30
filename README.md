@@ -34,6 +34,8 @@ To get started with the Weather Dashboard, follow these steps:
 
 ## Screenshots
 
+![screenshot1](Screenshot%202023-05-30%20at%2022.25.14.png)
+
 ## Credits
 
 OpenWeatherMap - Used to retrieve weather data.

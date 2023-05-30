@@ -51,51 +51,28 @@ const lookupLocation = (search) => {
     });
 };
 
-const displayWeather(weatherData) =>{
-  const forecastContainer = document.getElementById("forecast_items");
-  forecastContainer.innerHTML = "";
-
-  const dailyForecast = weatherData.daily.slice(1, MAX_DAILY_FORECAST + 1);
-
-  dailyForecast.forEach((day) => {
-    const date = new Date(day.dt * 1000).toLocaleDateString();
-    const iconUrl = getWeatherIconUrl(day.weather[0].icon);
-    const temp = day.temp.day;
-    const windSpeed = day.wind_speed;
-    const humidity = day.humidity;
-
-    const forecastItem = document.createElement("div");
-    forecastItem.classList.add("forecast-item");
-
-    const dateElement = document.createElement("p");
-    dateElement.textContent = date;
-
-    const iconElement = document.createElement("img");
-    iconElement.setAttribute("src", iconUrl);
-
-    const tempElement = document.createElement("p");
-    tempElement.textContent = `${temp}°F`;
-
-    const windElement = document.createElement("p");
-    windElement.textContent = `${windSpeed} MPH`;
-
-    const humidityElement = document.createElement("p");
-    humidityElement.textContent = `${humidity}%`;
-
-    forecastItem.appendChild(dateElement);
-    forecastItem.appendChild(iconElement);
-    forecastItem.appendChild(tempElement);
-    forecastItem.appendChild(windElement);
-    forecastItem.appendChild(humidityElement);
-
-    forecastContainer.appendChild(forecastItem);
-  });
-}
-
-function getCurrentDate() {
+const getCurrentDate = () => {
   const currentDate = new Date();
   return currentDate.toLocaleDateString();
-}
+};
+
+const displayCurrentWeather = (weatherData) => {
+  const currentWeather = weatherData.current;
+
+  document.getElementById("city_name").textContent = weatherData.timezone;
+  //document.getElementById("date").textContent = getCurrentDate();
+  document
+    .getElementById("weather_icon")
+    .setAttribute("src", getWeatherIconUrl(currentWeather.weather[0].icon));
+
+  document.getElementById("temp_value").textContent = `${currentWeather.temp}`;
+  document.getElementById(
+    "humid_value"
+  ).textContent = `${currentWeather.humidity}%`;
+  document.getElementById(
+    "wind_value"
+  ).textContent = `${currentWeather.wind_speed} MPH`;
+};
 
 const getWeatherIconUrl = (iconCode) => {
   return `https://openweathermap.org/img/w/${iconCode}.png`;
